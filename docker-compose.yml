@@ -1,0 +1,32 @@
+version: '3' 
+
+services:
+  app: 
+    build: . 
+    links:
+      - "postgredb:db"
+    command: yarn dev 
+    ports:
+      - '3333:3333'
+    volumes:
+      - .:/usr/app
+
+  pgadmin:
+    image: dpage/pgadmin4
+    links:
+      - "postgredb:db"
+    ports:
+      - "8080:80"
+    environment:
+      PGADMIN_DEFAULT_EMAIL: "user@user.com"
+      PGADMIN_DEFAULT_PASSWORD : "1234"
+
+  postgredb:
+    image: postgres
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_USER: "postgres"
+      POSTGRES_PASSWORD: "1234"
+      PGDATA: /data/postgres
+
